@@ -299,7 +299,7 @@
       // --- END OF components/ArtistInfo.tsx ---
 
       // --- START OF components/TrackItem.tsx ---
-      const TrackItem = ({ track, index, isCurrent, isPlaying, onTrackSelect, isOffline, isSaving, onToggleOffline }) => {
+      const TrackItem = ({ track, index, isCurrent, isPlaying, onTrackSelect }) => {
         const isAvailable = track.available;
         const baseClasses = "flex items-center gap-4 p-2 rounded-md transition-colors duration-200 cursor-pointer";
         const stateClasses = isCurrent ? "bg-zinc-700" : (isAvailable ? "hover:bg-zinc-800" : "opacity-50 cursor-not-allowed");
@@ -316,22 +316,6 @@
             React.createElement('p', { className: `${textClass} truncate` }, track.title),
             track.featuring && React.createElement('p', { className: "text-xs text-gray-400 truncate" }, `(con ${track.featuring})`)
           ),
-          isAvailable && React.createElement('div', { className: "ml-auto pl-2 md:hidden" },
-            React.createElement('button', {
-              onClick: (e) => {
-                e.stopPropagation();
-                onToggleOffline(track);
-              },
-              className: "p-2 rounded-full hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-wait",
-              'aria-label': isOffline ? 'Eliminar de la lista sin conexión' : 'Guardar para escuchar después',
-              disabled: isSaving,
-              title: isOffline ? 'Eliminar de la lista sin conexión' : 'Guardar para escuchar después'
-            },
-              isSaving ? React.createElement(Icon, { name: "loader", className: "w-5 h-5 text-gray-400 animate-spin" })
-              : isOffline ? React.createElement(Icon, { name: "check", className: "w-5 h-5 text-green-400" })
-              : React.createElement(Icon, { name: "download", className: "w-5 h-5 text-gray-400" })
-            )
-          ),
           !isAvailable && React.createElement('div', { className: "flex items-center gap-2 text-sm text-gray-500 ml-auto pl-2" },
             React.createElement(Icon, { name: "location", className: "w-4 h-4" }),
             React.createElement('span', null, "No disponible")
@@ -341,7 +325,7 @@
       // --- END OF components/TrackItem.tsx ---
 
       // --- START OF components/TrackList.tsx ---
-      const TrackList = ({ tracks, currentTrackId, isPlaying, onTrackSelect, offlineTrackIds, savingTrackId, onToggleOffline }) => {
+      const TrackList = ({ tracks, currentTrackId, isPlaying, onTrackSelect }) => {
         return React.createElement('ul', { className: "space-y-1" },
           tracks.map((track, index) => React.createElement(TrackItem, {
             key: track.id,
@@ -350,9 +334,6 @@
             isCurrent: track.id === currentTrackId,
             isPlaying: track.id === currentTrackId && isPlaying,
             onTrackSelect: onTrackSelect,
-            isOffline: offlineTrackIds.has(track.id),
-            isSaving: savingTrackId === track.id,
-            onToggleOffline: onToggleOffline,
           }))
         );
       };
@@ -519,7 +500,6 @@
         const [progress, setProgress] = useState({ currentTime: 0, duration: 0 });
         const [volume, setVolume] = useState(1);
         const [offlineTrackIds, setOfflineTrackIds] = useState(new Set());
-        const [savingTrackId, setSavingTrackId] = useState(null);
         const [activeTab, setActiveTab] = useState('songs');
         const audioRef = useRef(null);
 
@@ -577,81 +557,67 @@
             audioRef.current.currentTime = 0;
           }
         }, []);
-
-        const toggleOfflineHandler = useCallback(async (track) => {
-          if (savingTrackId || !track.available) return;
-          setSavingTrackId(track.id);
-          try {
-            if (offlineTrackIds.has(track.id)) {
-              await removeTrackFromOffline(track);
-              setOfflineTrackIds(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(track.id);
-                return newSet;
-              });
-            } else {
-              await saveTrackForOffline(track);
-              setOfflineTrackIds(prev => new Set(prev).add(track.id));
-            }
-          } catch (error) {
-            console.error('Failed to update offline track:', error);
-            alert('Hubo un error al guardar la canción. Inténtalo de nuevo.');
-          } finally {
-            setSavingTrackId(null);
-          }
-        }, [offlineTrackIds, savingTrackId]);
         
         useEffect(() => {
-          const audio = audioRef.current;
-          if (!audio) return;
-        
-          let objectUrl = null;
-        
-          const setupAudio = async () => {
-            if (audio.src.startsWith('blob:')) {
-               URL.revokeObjectURL(audio.src);
-            }
+            const audio = audioRef.current;
+            if (!audio) return;
 
-            if (currentTrack?.audioSrc) {
-              const offlineResponse = await getOfflineAudio(currentTrack.audioSrc);
-              let srcToPlay;
-        
-              if (offlineResponse) {
-                const blob = await offlineResponse.blob();
-                objectUrl = URL.createObjectURL(blob);
-                srcToPlay = objectUrl;
-              } else {
-                srcToPlay = currentTrack.audioSrc;
-              }
-        
-              if (audio.src !== srcToPlay) {
-                  audio.src = srcToPlay;
-              }
-        
-              if (isPlaying) {
-                try {
-                  await audio.play();
-                } catch(e) {
-                   console.error("Error playing audio:", e)
-                   setIsPlaying(false);
+            let objectUrl = null;
+
+            const setupAudio = async () => {
+                if (audio.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(audio.src);
                 }
-              } else {
-                audio.pause();
-              }
-            } else {
-              audio.pause();
-              audio.src = '';
-            }
-          };
-        
-          setupAudio();
-        
-          return () => {
-            if (objectUrl) {
-              URL.revokeObjectURL(objectUrl);
-            }
-          };
-        }, [currentTrack, isPlaying]);
+
+                if (currentTrack?.audioSrc) {
+                    const offlineResponse = await getOfflineAudio(currentTrack.audioSrc);
+                    let srcToPlay;
+
+                    if (offlineResponse) {
+                        const blob = await offlineResponse.blob();
+                        objectUrl = URL.createObjectURL(blob);
+                        srcToPlay = objectUrl;
+                    } else {
+                        srcToPlay = currentTrack.audioSrc;
+                        if (isPlaying && !offlineTrackIds.has(currentTrack.id)) {
+                            saveTrackForOffline(currentTrack)
+                                .then(() => {
+                                    setOfflineTrackIds(prev => new Set(prev).add(currentTrack.id));
+                                })
+                                .catch(error => {
+                                    console.error(`Failed to save track ${currentTrack.id} for offline use:`, error);
+                                });
+                        }
+                    }
+
+                    if (audio.src !== srcToPlay) {
+                        audio.src = srcToPlay;
+                    }
+
+                    if (isPlaying) {
+                        try {
+                            await audio.play();
+                        } catch (e) {
+                            console.error("Error playing audio:", e);
+                            setIsPlaying(false);
+                        }
+                    } else {
+                        audio.pause();
+                    }
+                } else {
+                    audio.pause();
+                    audio.src = '';
+                }
+            };
+
+            setupAudio();
+
+            return () => {
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                }
+            };
+        }, [currentTrack, isPlaying, offlineTrackIds]);
 
         useEffect(() => {
           const audioElement = audioRef.current;
@@ -709,9 +675,6 @@
                 currentTrackId: currentTrack?.id,
                 isPlaying: isPlaying,
                 onTrackSelect: handleTrackSelect,
-                offlineTrackIds: offlineTrackIds,
-                savingTrackId: savingTrackId,
-                onToggleOffline: toggleOfflineHandler,
               });
           }
         };
