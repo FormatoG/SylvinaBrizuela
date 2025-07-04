@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RhythmStream Music Player</title>
+    <title>Sylvina Brizuela</title>
+    <link rel="icon" href="https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
@@ -75,7 +76,7 @@
         bioImageUrl: 'https://scontent.fgpo1-1.fna.fbcdn.net/v/t39.30808-6/468393350_10234420887814188_4343900435238788932_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pGaagvpTiJ8Q7kNvwGi3Ftw&_nc_oc=AdmBnazr8I2Toshl0owEHjAJPJIKig2-SqHWpLxz6tpCQ7GOxpmhXO5UhTUFDVFwETI&_nc_zt=23&_nc_ht=scontent.fgpo1-1.fna&_nc_gid=2ZkWwQ47tpg-NAFeae8TNQ&oh=00_AfPl804UI-6gB61EpFeBQ11Yq_t6RBrFO8b93yICZK1zxA&oe=686D3361',
         albumName: 'Sylvina Brizuela',
         releaseYear: '2012-∞',
-        bio: 'Sylvina Brizuela es cantante solista de folklore y profesora de vocalización de la ciudad de Presidencia Roque Sáenz Peña en la provincia del Chaco. Con una voz profunda y auténtica, combina la fuerza del canto tradicional con una calidez cercana que conecta con su público. Participa activamente en festivales y encuentros culturales, y también comparte su pasión por la música enseñando a nuevas generaciones. En cada escenario, Sylvina transmite raíces, identidad y emoción',
+        bio: 'Sylvina Brizuela es cantante solista de folklore y profesora de vocalización de la ciudad de Presidencia Roque Sáenz Peña en la provincia del Chaco. Con una voz profunda y auténtica, combina la fuerza del canto tradicional con una calidez cercana que conecta con su público. Participa activamente en festivales y encuentros culturales, y también comparte su pasión por la música enseñando a nuevas generaciones. En cada escenario, Sylvina transmite raíces, identidad y emoción.',
         contact: {
           email: 'sylvina.brizuela.musica@gmail.com',
           phone: '+54 9 364 412 3456',
@@ -725,7 +726,10 @@
           };
 
           return React.createElement('div', { className: "lg:hidden fixed inset-0 bg-zinc-900 z-50 flex flex-col animate-fade-in-up" },
-            React.createElement('header', { className: "flex-shrink-0 flex items-center p-2 border-b border-zinc-800" },
+            React.createElement('header', { 
+              className: "flex-shrink-0 flex items-center p-2 border-b border-zinc-800",
+              style: { paddingTop: `calc(0.5rem + env(safe-area-inset-top))` }
+            },
               React.createElement('button', {
                 onClick: () => setActiveTab('songs'),
                 className: "p-2 rounded-full hover:bg-zinc-800 transition-colors",
@@ -739,7 +743,10 @@
                 titleMap[activeTab]
               )
             ),
-            React.createElement('div', { className: "flex-1 overflow-y-auto p-6" },
+            React.createElement('div', { 
+              className: "flex-1 overflow-y-auto p-6",
+              style: { paddingBottom: `calc(7.5rem + env(safe-area-inset-bottom))` }
+            },
               renderTabContent(activeTab)
             )
           );
@@ -754,7 +761,7 @@
                 isPlaying: isPlaying,
               })
             ),
-            React.createElement('div', { className: "flex-1 flex flex-col min-h-0 bg-zinc-900 rounded-lg relative" },
+            React.createElement('div', { className: "flex-1 flex flex-col min-h-0 bg-zinc-900 rounded-lg relative overflow-hidden" },
               React.createElement(DesktopHeader, {
                 artist: ARTIST_DATA,
                 currentTrack: currentTrack,
