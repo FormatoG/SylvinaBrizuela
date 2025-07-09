@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -263,7 +264,7 @@
           }),
           React.createElement(AlbumInfo, { artist: artist, currentTrack: currentTrack, isPlaying: isPlaying }),
           React.createElement('div', { className: "flex items-center justify-center lg:justify-start gap-4 mt-4 w-full max-w-xs lg:max-w-full" },
-            React.createElement('a', { href: "https://formatog.github.io/", target: "_blank", rel: "noopener noreferrer", 'aria-label': "Visit Formato G", className: "bg-zinc-800 p-3 rounded-md hover:bg-zinc-700 transition-colors duration-200" },
+            React.createElement('a', { href: "https://formatog.github.io/", 'aria-label': "Visit Formato G", className: "bg-zinc-800 p-3 rounded-md hover:bg-zinc-700 transition-colors duration-200" },
               React.createElement('img', { src: "https://ia801406.us.archive.org/6/items/logo-blanco-favicom-02/logo%20blanco%20favicom-02.png", alt: "Formato G Logo", className: "w-6 h-6 object-contain" })
             ),
             React.createElement('div', { className: "relative", ref: shareContainerRef },
@@ -507,16 +508,15 @@
         }, []);
 
         const handleTrackSelect = useCallback((track) => {
-          if (track.available) {
-            // If the track is not the current one, or if it is the current one but it's paused,
-            // then set it as current and play.
-            if (currentTrack?.id !== track.id || !isPlaying) {
-              setCurrentTrack(track);
-              setIsPlaying(true);
+            if (track.available) {
+              if (currentTrack?.id === track.id) {
+                setIsPlaying(prev => !prev);
+              } else {
+                setCurrentTrack(track);
+                setIsPlaying(true);
+              }
             }
-            // If the same track is clicked while it's already playing, do nothing.
-          }
-        }, [currentTrack, isPlaying]);
+        }, [currentTrack]);
 
         const handleNext = useCallback(() => {
           const availableTracks = TRACK_DATA.filter(t => t.available);
@@ -561,42 +561,43 @@
         useEffect(() => {
             const audio = audioRef.current;
             if (!audio) return;
-
+          
             let objectUrl = null;
-
+          
             const setupAudio = async () => {
                 if (audio.src.startsWith('blob:')) {
                     URL.revokeObjectURL(audio.src);
                 }
-
+        
                 if (currentTrack?.audioSrc) {
                     const offlineResponse = await getOfflineAudio(currentTrack.audioSrc);
                     let srcToPlay;
-
+        
                     if (offlineResponse) {
                         const blob = await offlineResponse.blob();
                         objectUrl = URL.createObjectURL(blob);
                         srcToPlay = objectUrl;
                     } else {
                         srcToPlay = currentTrack.audioSrc;
-                        if (isPlaying && !offlineTrackIds.has(currentTrack.id)) {
-                            saveTrackForOffline(currentTrack)
-                                .then(() => {
-                                    setOfflineTrackIds(prev => new Set(prev).add(currentTrack.id));
-                                })
-                                .catch(error => {
-                                    console.error(`Failed to save track ${currentTrack.id} for offline use:`, error);
-                                });
-                        }
                     }
-
-                    if (audio.src !== srcToPlay) {
+        
+                    if (audio.currentSrc !== srcToPlay) {
                         audio.src = srcToPlay;
+                        audio.load();
                     }
-
+        
                     if (isPlaying) {
                         try {
                             await audio.play();
+                            if (!offlineResponse && !offlineTrackIds.has(currentTrack.id)) {
+                                saveTrackForOffline(currentTrack)
+                                    .then(() => {
+                                        setOfflineTrackIds(prev => new Set(prev).add(currentTrack.id));
+                                    })
+                                    .catch(error => {
+                                        console.error(`Failed to save track ${currentTrack.id} for offline use:`, error);
+                                    });
+                            }
                         } catch (e) {
                             console.error("Error playing audio:", e);
                             setIsPlaying(false);
@@ -609,13 +610,13 @@
                     audio.src = '';
                 }
             };
-
+          
             setupAudio();
-
+          
             return () => {
-                if (objectUrl) {
-                    URL.revokeObjectURL(objectUrl);
-                }
+              if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+              }
             };
         }, [currentTrack, isPlaying, offlineTrackIds]);
 
