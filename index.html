@@ -52,8 +52,9 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/client": "https://esm.sh/react-dom@^19.1.0/client"
   }
 }
 </script>
@@ -71,9 +72,9 @@
         name: 'Sylvina Brizuela',
         verified: false,
         followers: '12,3K',
-        trackCount: 8,
+        trackCount: 9,
         avatarUrl: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg',
-        bioImageUrl: 'https://scontent.fgpo1-1.fna.fbcdn.net/v/t39.30808-6/468393350_10234420887814188_4343900435238788932_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pGaagvpTiJ8Q7kNvwGi3Ftw&_nc_oc=AdmBnazr8I2Toshl0owEHjAJPJIKig2-SqHWpLxz6tpCQ7GOxpmhXO5UhTUFDVFwETI&_nc_zt=23&_nc_ht=scontent.fgpo1-1.fna&_nc_gid=2ZkWwQ47tpg-NAFeae8TNQ&oh=00_AfPl804UI-6gB61EpFeBQ11Yq_t6RBrFO8b93yICZK1zxA&oe=686D3361',
+        bioImageUrl: 'https://ia801501.us.archive.org/6/items/468393350-10234420887814188-4343900435238788932-n/468393350_10234420887814188_4343900435238788932_n.jpg',
         albumName: 'Sylvina Brizuela',
         releaseYear: '2012-∞',
         bio: 'Sylvina Brizuela es cantante solista de folklore y profesora de vocalización de la ciudad de Presidencia Roque Sáenz Peña en la provincia del Chaco. Con una voz profunda y auténtica, combina la fuerza del canto tradicional con una calidez cercana que conecta con su público. Participa activamente en festivales y encuentros culturales, y también comparte su pasión por la música enseñando a nuevas generaciones. En cada escenario, Sylvina transmite raíces, identidad y emoción.',
@@ -89,14 +90,15 @@
       };
 
       const TRACK_DATA = [
-        { id: 1, title: 'Aunque yo me muera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/Aunque%20yo%20me%20muera.mp3' },
-        { id: 2, title: 'Bailar de esa manera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/Bailar%20de%20esa%20manera.mp3' },
-        { id: 3, title: 'Cómo ristra é chacarera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/C%C3%B3mo%20ristra%20%C3%A9%20chacarera.mp3' },
-        { id: 4, title: 'Gatito enamorado', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/Gatito%20enamorado.mp3' },
-        { id: 5, title: 'La difícil', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/La%20dif%C3%ADcil.mp3' },
-        { id: 6, title: 'La rogadita', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, featuring: 'Federico Díaz', audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/La%20gordita%20con%20Feder%C3%ADco%20D%C3%ADaz.mp3' },
-        { id: 7, title: 'Me quedo', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/Me%20quedo.mp3' },
-        { id: 8, title: 'Sos lo que yo quiero', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, featuring: 'Federico Díaz', audioSrc: 'https://archive.org/download/como-ristra-e-chacarera/Sos%20lo%20que%20yo%20quiero%20con%20Federico%20D%C3%ADaz.mp3' },
+        { id: 1, title: 'Aunque yo me muera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043478/l9mxt7ybolflrnxtc1kh.mp3' },
+        { id: 2, title: 'Bailar de esa manera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043474/rn32suevmonjlig2sgj3.mp3' },
+        { id: 3, title: 'Cómo ristra é chacarera', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043470/cvbeyyryc2ptgufsdcjh.mp3' },
+        { id: 4, title: 'Gatito enamorado', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043468/p8duotnn25wujrxcmh4j.mp3' },
+        { id: 5, title: 'La difícil', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043468/mkioiem9xqx5rrnp31bc.mp3' },
+        { id: 6, title: 'La rogadita', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, featuring: 'Federico Díaz', audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043472/nhjn5mcodbdpwyjokwlr.mp3' },
+        { id: 7, title: 'Me quedo', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043474/ytmjb0hai1pfq21398x0.mp3' },
+        { id: 8, title: 'Sos lo que yo quiero', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, featuring: 'Federico Díaz', audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043471/b8l0mph62i3ruaoo8ouy.mp3' },
+        { id: 9, title: 'Canto del Quebracho', artist: 'Sylvina Brizuela', duration: '0:00', albumArt: 'https://ia600401.us.archive.org/10/items/tapa_20250702/tapa.jpg', available: true, audioSrc: 'https://res.cloudinary.com/dz25se1yc/video/upload/v1752043478/ehjut5l2lb2rixwtwlmi.mp3' },
       ];
       // --- END OF constants.ts ---
 
@@ -233,7 +235,7 @@
       const ArtistInfo = ({ artist, currentTrack, isPlaying }) => {
         const [showShareOptions, setShowShareOptions] = useState(false);
         const shareContainerRef = useRef(null);
-        const shareUrl = "https://sites.google.com/view/desmuda/nohemi";
+        const shareUrl = "https://formatog.github.io/SylvinaBrizuela/";
 
         const handleShareClick = () => {
           setShowShareOptions(prev => !prev);
@@ -261,7 +263,7 @@
           }),
           React.createElement(AlbumInfo, { artist: artist, currentTrack: currentTrack, isPlaying: isPlaying }),
           React.createElement('div', { className: "flex items-center justify-center lg:justify-start gap-4 mt-4 w-full max-w-xs lg:max-w-full" },
-            React.createElement('a', { href: "https://sites.google.com/view/formatog/inicio", target: "_blank", rel: "noopener noreferrer", 'aria-label': "Visit Formato G", className: "bg-zinc-800 p-3 rounded-md hover:bg-zinc-700 transition-colors duration-200" },
+            React.createElement('a', { href: "https://formatog.github.io/", target: "_blank", rel: "noopener noreferrer", 'aria-label': "Visit Formato G", className: "bg-zinc-800 p-3 rounded-md hover:bg-zinc-700 transition-colors duration-200" },
               React.createElement('img', { src: "https://ia801406.us.archive.org/6/items/logo-blanco-favicom-02/logo%20blanco%20favicom-02.png", alt: "Formato G Logo", className: "w-6 h-6 object-contain" })
             ),
             React.createElement('div', { className: "relative", ref: shareContainerRef },
@@ -380,9 +382,6 @@
               ),
               React.createElement('button', { onClick: onStop, className: "hidden md:flex text-gray-400 hover:text-white transition-colors", 'aria-label': "Stop" },
                 React.createElement(Icon, { name: "stop", className: "w-5 h-5" })
-              ),
-              React.createElement('button', { className: "hidden md:block text-gray-400 hover:text-white transition-colors", 'aria-label': "Repeat" },
-                React.createElement(Icon, { name: "repeat", className: "w-5 h-5" })
               )
             ),
             React.createElement('div', { className: "flex items-center gap-2 w-full md:max-w-lg px-0 md:px-0" },
@@ -509,14 +508,15 @@
 
         const handleTrackSelect = useCallback((track) => {
           if (track.available) {
-            if (currentTrack?.id === track.id) {
-               setIsPlaying(prev => !prev);
-            } else {
+            // If the track is not the current one, or if it is the current one but it's paused,
+            // then set it as current and play.
+            if (currentTrack?.id !== track.id || !isPlaying) {
               setCurrentTrack(track);
               setIsPlaying(true);
             }
+            // If the same track is clicked while it's already playing, do nothing.
           }
-        }, [currentTrack]);
+        }, [currentTrack, isPlaying]);
 
         const handleNext = useCallback(() => {
           const availableTracks = TRACK_DATA.filter(t => t.available);
