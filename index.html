@@ -492,6 +492,46 @@
         );
       };
       // --- END OF components/ContentTabs.tsx ---
+      
+      // --- START OF components/FullScreenContentOverlay.tsx ---
+      const FullScreenContentOverlay = ({ activeTab, onClose, children }) => {
+        if (activeTab === 'songs') {
+          return null;
+        }
+
+        const titleMap = {
+          bio: 'Biografía',
+          contact: 'Contacto',
+          support: 'Apoyar'
+        };
+
+        return React.createElement('div', { className: "lg:hidden fixed inset-0 bg-zinc-900 z-50 flex flex-col animate-fade-in-up" },
+          React.createElement('header', { 
+            className: "flex-shrink-0 flex items-center p-2 border-b border-zinc-800",
+            style: { paddingTop: `calc(0.5rem + env(safe-area-inset-top))` }
+          },
+            React.createElement('button', {
+              onClick: onClose,
+              className: "p-2 rounded-full hover:bg-zinc-800 transition-colors",
+              'aria-label': "Volver"
+            },
+              React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", className: "h-6 w-6 text-white", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+                React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" })
+              )
+            ),
+            React.createElement('h2', { className: "text-lg font-semibold text-white text-center flex-1 pr-10" },
+              titleMap[activeTab]
+            )
+          ),
+          React.createElement('div', { 
+            className: "flex-1 overflow-y-auto p-6",
+            style: { paddingBottom: `calc(7.5rem + env(safe-area-inset-bottom))` }
+          },
+            children
+          )
+        );
+      };
+      // --- END OF components/FullScreenContentOverlay.tsx ---
 
       // --- START OF App.tsx ---
       const App = () => {
@@ -680,42 +720,6 @@
           }
         };
 
-        const FullScreenContentOverlay = () => {
-          if (activeTab === 'songs') return null;
-
-          const titleMap = {
-            bio: 'Biografía',
-            contact: 'Contacto',
-            support: 'Apoyar'
-          };
-
-          return React.createElement('div', { className: "lg:hidden fixed inset-0 bg-zinc-900 z-50 flex flex-col animate-fade-in-up" },
-            React.createElement('header', { 
-              className: "flex-shrink-0 flex items-center p-2 border-b border-zinc-800",
-              style: { paddingTop: `calc(0.5rem + env(safe-area-inset-top))` }
-            },
-              React.createElement('button', {
-                onClick: () => setActiveTab('songs'),
-                className: "p-2 rounded-full hover:bg-zinc-800 transition-colors",
-                'aria-label': "Volver"
-              },
-                React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", className: "h-6 w-6 text-white", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-                  React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" })
-                )
-              ),
-              React.createElement('h2', { className: "text-lg font-semibold text-white text-center flex-1 pr-10" },
-                titleMap[activeTab]
-              )
-            ),
-            React.createElement('div', { 
-              className: "flex-1 overflow-y-auto p-6",
-              style: { paddingBottom: `calc(7.5rem + env(safe-area-inset-bottom))` }
-            },
-              renderTabContent(activeTab)
-            )
-          );
-        };
-
         return React.createElement('div', { className: "bg-[#121212] text-gray-300 font-sans h-dvh flex flex-col" },
           React.createElement('main', { className: "flex-1 flex flex-col lg:flex-row gap-8 p-4 lg:p-8 overflow-hidden" },
             React.createElement('aside', { className: "w-full lg:w-1/4 lg:max-w-xs flex-shrink-0 lg:overflow-y-auto hide-scrollbar" },
@@ -742,7 +746,11 @@
               )
             )
           ),
-          React.createElement(FullScreenContentOverlay, null),
+          React.createElement(FullScreenContentOverlay, {
+            activeTab: activeTab,
+            onClose: () => setActiveTab('songs'),
+            children: renderTabContent(activeTab)
+          }),
           React.createElement('div', { className: "flex-shrink-0", style: { height: `calc(6rem + env(safe-area-inset-bottom))` } }),
           React.createElement('audio', { ref: audioRef, preload: "metadata", crossOrigin: "anonymous" }),
           React.createElement(PlayerControls, {
